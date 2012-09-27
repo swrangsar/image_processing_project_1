@@ -77,63 +77,48 @@ end
 
 return;
 
-function [res] = objective(x,dx,t,sampler,data, param);
 
+function [res] = objective(x,dx,t,sampler,data, param);
 %DEFINE obj
-%swrangsar
 x = x + (t * dx);
 b = data;
 Ax = sampler .* fftshift(fft2(fftshift(x)));
-
 obj = (Ax - b);
+res=( obj(:)'*obj(:) ) + (param.TVWeight * TV(x));
 
-%swrangsar
-res=( 1.*obj(:)'*obj(:) ) + (param.TVWeight * TV(x));
 
 function grad = wGradient(x,sampler,data, param)
-
 %Define this function
-sampler=sampler;
-data=data;
 gradObj=gOBJ(x,sampler,data);
-%student
-grad = (1.*gradObj) + (param.TVWeight * gTV(x));
+grad = (gradObj) + (param.TVWeight * gTV(x));
+
 
 function gradObj = gOBJ(x,sampler,data);
 % computes the gradient of the data consistency
-
 %DEFINE gradObj
-%swrangsar
 b = data;
 Ax = sampler .* fftshift(fft2(fftshift(x)));
 AhAx = ifftshift(ifft2(ifftshift(Ax)));
 Ahb = ifftshift(ifft2(ifftshift(b)));
-
 gradObj = 2 * (AhAx - Ahb);
+
 
 function gradTV = gTV(x)
 % compute gradient of TV operator
 %swrangsar
 ux = filter2([1 -1 0], x);
 uy = filter2([1; -1; 0], x);
-ux2 = ux * (conj(ux)');
-uy2 = uy * (conj(uy)');
-mag = sqrt(ux2 + uy2);
+ux2 = ux .* (conj(ux));
+uy2 = uy .* (conj(uy));
+mag = sqrt(ux2 + uy2 + eps);
 gradTV = (ux + (1i*uy)) ./ mag;
 
-%I had defined gradient for TV function
 
 %YOU MAY WANT TO ADD MORE FUNCTIONS AND GRADIENTS
-function totalvariance = TV(x)
+function totalvariation = TV(x)
 ux = filter2([1 -1 0], x);
 uy = filter2([1; -1; 0], x);
-
-mag = abs(ux) + abs(uy);
-totalvariance = sum(mag(:));
-
-
-function fov = fov(x, param)
-rx = (x .* x) - (x .* x .* param.Mask);
-fov = sum(rx(:));
-
-function gFov = gFov(x, param)
+ux2 = ux .* (conj(ux));
+uy2 = uy .* (conj(uy));
+mag = sqrt(ux2 + uy2 + eps);
+totalvariation = sum(mag(:)) ;

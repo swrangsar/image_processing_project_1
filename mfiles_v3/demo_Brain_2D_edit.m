@@ -19,9 +19,8 @@ sampler=mask./pdf;
 
 N = size(data); 	% image Size
 DN = size(data); 	% Fourier data Size
-param.TVWeight = .00000001; 	% Weight for TV penalty
-param.Mask = mask;
-param.FOVWeight = 0.77;
+param.TVWeight = .0000001; 	% Weight for TV penalty
+
 
 % scale data
 im_dc = ifftshift(ifft2(ifftshift(data.*sampler))); % matrix E has been defined here
