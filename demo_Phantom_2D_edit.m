@@ -10,7 +10,7 @@ close all; clear all;
 
 load phantomImageProject
 originalImage = phantom('Modified Shepp-Logan', 512);
-data = fftshift(fft2(fftshift(originalImage)));
+data = real(fftshift(fft2(fftshift(originalImage))));
 
 sampler = mask;
 
