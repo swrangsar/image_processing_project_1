@@ -8,12 +8,10 @@ close all; clear all;
 % 	error('must have Wavelab installed and in the path');
 % end
 
-load brain512
-data = phantom('Modified Shepp-Logan', 512);
-data = fftshift(fft2(fftshift(data)));
-% imshow(real(data), [ ]);
+load phantomImageProject
+originalImage = phantom('Modified Shepp-Logan', 512);
+data = fftshift(fft2(fftshift(originalImage)));
 
-% sampler=mask./pdf;
 sampler = mask;
 
 
@@ -23,7 +21,7 @@ sampler = mask;
 
 N = size(data); 	% image Size
 DN = size(data); 	% Fourier data Size
-param.TVWeight = .1; 	% Weight for TV penalty
+param.TVWeight = .0001; 	% Weight for TV penalty
 
 % scale data
 im_dc = ifftshift(ifft2(ifftshift(data.*sampler))); % matrix E has been defined here
@@ -36,13 +34,8 @@ res = im_dc;  %Initial degraded image supplied to fnlcg function
 % do iterations
 tic
 for n=1:5
-	res = fnlCgphantom(res,sampler,data, param);  %initialize fnlcg
+	res = fnlCg(res,sampler,data, param);  %initialize fnlcg
 	im_res = res;
 	figure(100), imshow(abs(im_res),[]), drawnow
 end
 toc
-
-
-
-
-
