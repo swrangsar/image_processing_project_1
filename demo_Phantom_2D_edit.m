@@ -10,7 +10,7 @@ close all; clear all;
 
 load phantomImageProject
 originalImage = phantom('Modified Shepp-Logan', 512);
-data = real(fftshift(fft2(fftshift(originalImage))));
+data = fftshift(fft2(fftshift(originalImage)));
 
 sampler = mask;
 
@@ -21,7 +21,7 @@ sampler = mask;
 
 N = size(data); 	% image Size
 DN = size(data); 	% Fourier data Size
-param.TVWeight = .0001; 	% Weight for TV penalty
+param.TVWeight = .0000001; 	% Weight for TV penalty
 
 % scale data
 im_dc = ifftshift(ifft2(ifftshift(data.*sampler))); % matrix E has been defined here

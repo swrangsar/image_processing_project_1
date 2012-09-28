@@ -12,7 +12,6 @@ t0 = 1;
 Itnlim = 16;	
 
 k = 0;
-t = 1;
 
 % copmute g0  = grad(Phi(x))
 g0 = wGradient(x,sampler,data, param);
