@@ -8,7 +8,7 @@ close all; clear all;
 % 	error('must have Wavelab installed and in the path');
 % end
 
-load brain512
+load brain512 
 
 sampler=mask./pdf;
 
@@ -19,7 +19,7 @@ sampler=mask./pdf;
 
 N = size(data); 	% image Size
 DN = size(data); 	% Fourier data Size
-param.TVWeight = .0001; 	% Weight for TV penalty
+param.TVWeight = .00000000001; 	% Weight for TV penalty
 
 
 % scale data
