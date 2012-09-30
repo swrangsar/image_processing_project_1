@@ -19,7 +19,7 @@ sampler=mask./pdf;
 
 N = size(data); 	% image Size
 DN = size(data); 	% Fourier data Size
-param.TVWeight = .0001; 	% Weight for TV penalty
+param.TVWeight = .77; 	% Weight for TV penalty
 
 
 % scale data
