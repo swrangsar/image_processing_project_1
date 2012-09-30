@@ -10,9 +10,9 @@ close all; clear all;
 
 load brain512
 originalImage = phantom('Modified Shepp-Logan', 512);
+data = fftshift(fft2(fftshift(originalImage)));
 
-sampler = mask./pdf;
-data = sampler .* fftshift(fft2(fftshift(originalImage)));
+sampler = mask;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
