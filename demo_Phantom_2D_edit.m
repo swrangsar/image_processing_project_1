@@ -4,7 +4,7 @@ load brain512
 originalImage = phantom('Modified Shepp-Logan', 512);
 
 sampler = mask./pdf;
-data = sampler .* fftshift(fft2(fftshift(originalImage)));
+data = mask .* fftshift(fft2(fftshift(originalImage)));
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -13,7 +13,7 @@ data = sampler .* fftshift(fft2(fftshift(originalImage)));
 
 N = size(data); 	% image Size
 DN = size(data); 	% Fourier data Size
-param.TVWeight = .77; 	% Weight for TV penalty
+param.TVWeight = 5; 	% Weight for TV penalty
 
 % scale data
 im_dc = ifftshift(ifft2(ifftshift(data.*sampler))); % matrix E has been defined here
@@ -23,6 +23,7 @@ im_dc = im_dc/max(abs(im_dc(:)));
 
 res = im_dc;  %Initial degraded image supplied to fnlcg function
 
+figure(300), imshow(abs(res), []);
 % do iterations
 tic
 for n=1:5

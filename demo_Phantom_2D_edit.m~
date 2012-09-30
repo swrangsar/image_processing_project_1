@@ -1,18 +1,10 @@
 close all; clear all;
-% This script has to be developed by the students
-% addpath(strcat(pwd,'/utils'));
-% 
-% WavePath;
-% 
-% if exist('FWT2_PO') <2
-% 	error('must have Wavelab installed and in the path');
-% end
 
 load brain512
 originalImage = phantom('Modified Shepp-Logan', 512);
-data = fftshift(fft2(fftshift(originalImage)));
 
-sampler = mask;
+sampler = mask./pdf;
+data = mask .* fftshift(fft2(fftshift(originalImage)));
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,7 +13,7 @@ sampler = mask;
 
 N = size(data); 	% image Size
 DN = size(data); 	% Fourier data Size
-param.TVWeight = .77; 	% Weight for TV penalty
+param.TVWeight = 10; 	% Weight for TV penalty
 
 % scale data
 im_dc = ifftshift(ifft2(ifftshift(data.*sampler))); % matrix E has been defined here
@@ -31,6 +23,7 @@ im_dc = im_dc/max(abs(im_dc(:)));
 
 res = im_dc;  %Initial degraded image supplied to fnlcg function
 
+figure(300), imshow(abs(res)
 % do iterations
 tic
 for n=1:5

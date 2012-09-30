@@ -11,7 +11,7 @@ sampler=mask./pdf;
 
 N = size(data); 	% image Size
 DN = size(data); 	% Fourier data Size
-param.TVWeight = .77; 	% Weight for TV penalty
+param.TVWeight = 0.77; 	% Weight for TV penalty
 
 
 % scale data
@@ -21,6 +21,7 @@ data = data/max(abs(im_dc(:)));
 im_dc = im_dc/max(abs(im_dc(:)));
 
 res = im_dc;  %Initial degraded image supplied to fnlcg function
+figure(300), imshow(abs(res), []);
 
 % do iterations
 tic
