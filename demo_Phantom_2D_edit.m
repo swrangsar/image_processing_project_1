@@ -1,12 +1,4 @@
 close all; clear all;
-% This script has to be developed by the students
-% addpath(strcat(pwd,'/utils'));
-% 
-% WavePath;
-% 
-% if exist('FWT2_PO') <2
-% 	error('must have Wavelab installed and in the path');
-% end
 
 load brain512
 originalImage = phantom('Modified Shepp-Logan', 512);
