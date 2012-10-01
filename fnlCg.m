@@ -83,14 +83,12 @@ x = x + (t * dx);
 b = data;
 Ax = sampler .* fftshift(fft2(fftshift(x)));
 obj = (Ax - b);
-% res=(obj(:)'*obj(:)) + (param.TVWeight * TV(x)) + (param.FOVWeight * fov(x));
-res = param.FOVWeight * fov(x);
+res=(obj(:)'*obj(:)) + (param.TVWeight * TV(x)) + (param.FOVWeight * fov(x));
 
 function grad = wGradient(x,sampler,data, param)
 %Define this function
 gradObj=gOBJ(x,sampler,data);
-% grad = (gradObj) + (param.TVWeight * gTV(x)) + (param.FOVWeight * gradFOV(x));
-grad = param.FOVWeight * gradFOV(x);
+grad = (gradObj) + (param.TVWeight * gTV(x)) + (param.FOVWeight * gradFOV(x));
 
 function gradObj = gOBJ(x,sampler,data)
 % computes the gradient of the data consistency
@@ -116,25 +114,24 @@ uy2 = uy .* (conj(uy));
 mag = sqrt(ux2 + uy2);
 totalvariation = sum(mag(:)) ;
 
+
 function fovMask = fovMask(data)
 fieldRadius = 240/512;
 [rows, cols] = size(data);
-
 % X and Y matrices with ranges normalised to +/- 0.5
 x =  (ones(rows,1) * [1:cols]  - (fix(cols/2)+1))/cols;
 y =  ([1:rows]' * ones(1,cols) - (fix(rows/2)+1))/rows;
-
 radius = sqrt(x.^2 + y.^2);        % A matrix with every pixel = radius relative to centre.
-
 i = radius < fieldRadius;
 data(i) = 0;
 fovMask = data;
 
+
 function fov = fov(x)
-x = x .* fovMask(x);
+x = fovMask(x);
 mag = abs(x) .^ 2;
 fov = sum(mag(:));
 
 function gradFOV = gradFOV(x)
-x = x .* fovMask(x);
-gradFOV = abs(x) .^ 2;
+x = fovMask(x);
+gradFOV = 2*x;
